@@ -1,7 +1,7 @@
 ---
 - name: Check current list of Solr cores.
   uri:
-    url: http://{{ solr_jetty_host }}:{{ solr_port }}/solr/admin/cores
+    url: http://{{ solr_jetty_host if solr_jetty_host != '0.0.0.0' else solr_admin_listen_ip }}:{{ solr_port }}/solr/admin/cores
     return_content: true
   register: solr_cores_current
   check_mode: false
