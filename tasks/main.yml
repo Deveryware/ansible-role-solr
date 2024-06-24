@@ -69,14 +69,5 @@
   when:
     - solr_cores
     - solr_version.split('.')[0] >= '5'
-    - solr_jetty_host == '127.0.0.1'
-
-# Create cores also when solr is listening on custom network interface. Just for solr 9.3.0 and higher.
-- include_tasks: cores-post93.yml
-  when:
-    - solr_cores
-    - solr_version is version('9.3.0' ,'>=')
-    - solr_jetty_host != '127.0.0.1'
-
 
 - include_tasks: trim-fat.yml
