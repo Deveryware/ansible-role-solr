@@ -49,7 +49,7 @@
     -p {{ solr_port }}
     {{ (solr_version is version('6.3.0', '>=')) | ternary('-n','') }}
     {{ (solr_version is version('5.4.0', '>=')) | ternary('-f','') }}
-    creates={{ solr_install_path }}/bin/solr
+    creates={{ solr_install_dir }}/{{ solr_filename }}/bin/solr
   register: solr_install_script_result
 
 # Workaround for bug https://github.com/ansible/ansible-modules-core/issues/915.
