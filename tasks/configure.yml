@@ -44,10 +44,6 @@
     - regexp: "^.?SOLR_JETTY_HOST="
       line: 'SOLR_JETTY_HOST="{{ solr_jetty_host }}"'
   register: solr_config
+  notify: restart solr
   when: solr_jetty_host != '127.0.0.1'
 
-- name: Restart solr to load new configuration
-  service:
-    name: solr
-    state: restarted
-  when: solr_config.changed
