@@ -23,3 +23,16 @@
     - regexp: "^.?SOLR_OPTS="
       line: 'SOLR_OPTS="{{ solr_opts }}"'
   notify: restart solr
+
+- name: Apply Solr configuration changes solr >= 9.3.0.
+  lineinfile:
+    dest: "{{ solr_config_file }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    mode: 0644
+  with_items:
+    - regexp: "^.?SOLR_JETTY_HOST="
+      line: 'SOLR_JETTY_HOST="{{ solr_jetty_host }}"'
+  notify: restart solr
+  when: solr_jetty_host != '127.0.0.1'

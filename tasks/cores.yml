@@ -1,7 +1,7 @@
 ---
 - name: Check current list of Solr cores.
   uri:
-    url: http://{{ solr_connect_host }}:{{ solr_port }}/solr/admin/cores
+    url: http://{{ solr_jetty_host if solr_jetty_host != '0.0.0.0' else solr_admin_listen_ip }}:{{ solr_port }}/solr/admin/cores
     return_content: true
   register: solr_cores_current
   check_mode: false
@@ -25,7 +25,12 @@
   become_user: "{{ solr_user }}"
 
 - name: Create configured cores.
-  command: "{{ solr_install_path }}/bin/solr create -c {{ item }} -p {{ solr_port }}"
+  environment:
+    - SOLR_HOST: "{{ solr_jetty_host if solr_jetty_host != '0.0.0.0' else solr_admin_listen_ip }}"
+  command: >
+    {{ solr_install_path }}/bin/solr create
+    -c {{ item }}
+    -p {{ solr_port }}
   when: "item not in solr_cores_current.content"
   with_items: "{{ solr_cores }}"
   become: true

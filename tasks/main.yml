@@ -1,4 +1,6 @@
 ---
+- import_tasks: checks.yml
+
 - import_tasks: user.yml
   when: solr_create_user
 
@@ -64,6 +66,8 @@
 
 # Create cores, if any are configured.
 - include_tasks: cores.yml
-  when: "solr_cores and solr_version.split('.')[0] >= '5'"
+  when:
+    - solr_cores
+    - solr_version.split('.')[0] >= '5'
 
 - include_tasks: trim-fat.yml
